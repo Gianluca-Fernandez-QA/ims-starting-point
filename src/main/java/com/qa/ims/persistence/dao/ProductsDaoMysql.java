@@ -49,7 +49,7 @@ public class ProductsDaoMysql implements Dao<Product> {
 	public List<Product> readAll() {
 		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);
 				Statement statement = connection.createStatement();
-				ResultSet resultSet = statement.executeQuery("select * from customers");) {
+				ResultSet resultSet = statement.executeQuery("select * from products");) {
 			ArrayList<Product> product = new ArrayList<>();
 			while (resultSet.next()) {
 				product.add(productFromResultSet(resultSet));
@@ -81,11 +81,11 @@ public class ProductsDaoMysql implements Dao<Product> {
 	 * @param customer - takes in a customer object. id will be ignored
 	 */
 	@Override
-	public Customer create(Customer customer) {
+	public Product create(Product test) {
 		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);
 				Statement statement = connection.createStatement();) {
-			statement.executeUpdate("insert into customers(first_name, surname) values('" + customer.getFirstName()
-					+ "','" + customer.getSurname() + "')");
+			statement.executeUpdate("insert into products(Product_name, Price) values('" + test.getProduct_name()
+					+ "','" + test.getPrice() + "')");
 			return readLatest();
 		} catch (Exception e) {
 			LOGGER.debug(e.getStackTrace());
@@ -94,7 +94,7 @@ public class ProductsDaoMysql implements Dao<Product> {
 		return null;
 	}
 
-	public Customer readCustomer(Long id) {
+	public Product read(Long id) {
 		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery("SELECT FROM customers where id = " + id);) {
@@ -142,12 +142,6 @@ public class ProductsDaoMysql implements Dao<Product> {
 			LOGGER.debug(e.getStackTrace());
 			LOGGER.error(e.getMessage());
 		}
-	}
-
-	@Override
-	public Product create(Product t) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
