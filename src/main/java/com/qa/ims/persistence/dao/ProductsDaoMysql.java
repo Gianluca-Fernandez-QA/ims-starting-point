@@ -10,7 +10,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.qa.ims.persistence.domain.Customer;
 import com.qa.ims.persistence.domain.Product;
 import com.qa.ims.utils.Utils;
 
@@ -109,7 +108,7 @@ public class ProductsDaoMysql implements Dao<Product> {
 	 * Updates a product in the database
 	 *
 	 * @param product - takes in a product object, the id field will be used to
-	 *                 update that product in the database
+	 *                update that product in the database
 	 * @return
 	 */
 	@Override
@@ -117,7 +116,7 @@ public class ProductsDaoMysql implements Dao<Product> {
 		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);
 				Statement statement = connection.createStatement();) {
 			statement.executeUpdate("update products set Product_name ='" + test.getProduct_name() + "', Price ='"
-					+ test.getPrice() + "' where id =" + test.getProduct_id()());
+					+ test.getPrice() + "' where id =" + test.getProduct_id());
 			return readProduct(test.getProduct_id());
 		} catch (Exception e) {
 			LOGGER.debug(e.getStackTrace());
