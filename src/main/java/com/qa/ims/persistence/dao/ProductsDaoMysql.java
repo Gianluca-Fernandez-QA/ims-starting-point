@@ -11,33 +11,33 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.qa.ims.persistence.domain.Customer;
+import com.qa.ims.persistence.domain.Product;
 import com.qa.ims.utils.Utils;
 
-public class CustomerDaoMysql implements Dao<Customer> {
-
+public class ProductsDaoMysql implements Dao<Product> {
 	public static final Logger LOGGER = Logger.getLogger(CustomerDaoMysql.class);
 
 	private String jdbcConnectionUrl;
 	private String username;
 	private String password;
 
-	public CustomerDaoMysql(String username, String password) {
+	public ProductsDaoMysql(String username, String password) {
 		this.jdbcConnectionUrl = "jdbc:mysql://" + Utils.MYSQL_URL + "/ims?serverTimezone=UTC";
 		this.username = username;
 		this.password = password;
 	}
 
-	public CustomerDaoMysql(String jdbcConnectionUrl, String username, String password) {
+	public ProductsDaoMysql(String jdbcConnectionUrl, String username, String password) {
 		this.jdbcConnectionUrl = jdbcConnectionUrl;
 		this.username = username;
 		this.password = password;
 	}
 
-	Customer customerFromResultSet(ResultSet resultSet) throws SQLException {
-		Long id = resultSet.getLong("id");
-		String firstName = resultSet.getString("first_name");
-		String surname = resultSet.getString("surname");
-		return new Customer(id, firstName, surname);
+	Product productFromResultSet(ResultSet resultSet) throws SQLException {
+		Long Product_id = resultSet.getLong("Product_id");
+		String Product_name = resultSet.getString("Product_id");
+		float Price = resultSet.getFloat("Product_id");
+		return new Product(Product_id, Product_name, Price);
 	}
 
 	/**
@@ -46,15 +46,15 @@ public class CustomerDaoMysql implements Dao<Customer> {
 	 * @return A list of customers
 	 */
 	@Override
-	public List<Customer> readAll() {
+	public List<Product> readAll() {
 		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery("select * from customers");) {
-			ArrayList<Customer> customers = new ArrayList<>();
+			ArrayList<Product> product = new ArrayList<>();
 			while (resultSet.next()) {
-				customers.add(customerFromResultSet(resultSet));
+				product.add(productFromResultSet(resultSet));
 			}
-			return customers;
+			return product;
 		} catch (SQLException e) {
 			LOGGER.debug(e.getStackTrace());
 			LOGGER.error(e.getMessage());
@@ -62,12 +62,12 @@ public class CustomerDaoMysql implements Dao<Customer> {
 		return new ArrayList<>();
 	}
 
-	public Customer readLatest() {
+	public Product readLatest() {
 		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);
 				Statement statement = connection.createStatement();
-				ResultSet resultSet = statement.executeQuery("SELECT * FROM customers ORDER BY id DESC LIMIT 1");) {
+				ResultSet resultSet = statement.executeQuery("SELECT * FROM products ORDER BY id DESC LIMIT 1");) {
 			resultSet.next();
-			return customerFromResultSet(resultSet);
+			return productFromResultSet(resultSet);
 		} catch (Exception e) {
 			LOGGER.debug(e.getStackTrace());
 			LOGGER.error(e.getMessage());
@@ -144,4 +144,15 @@ public class CustomerDaoMysql implements Dao<Customer> {
 		}
 	}
 
+	@Override
+	public Product create(Product t) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Product update(Product t) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

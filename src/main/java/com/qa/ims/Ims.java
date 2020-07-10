@@ -46,6 +46,7 @@ public class Ims {
 			doAction(customerController, action);
 			break;
 		case ITEM:
+
 			break;
 		case ORDER:
 			break;
@@ -86,7 +87,8 @@ public class Ims {
 	 * @param password
 	 */
 	public void init(String username, String password) {
-		init("jdbc:mysql://" + Utils.MYSQL_URL + "/", username, password, "src/main/resources/sql-schema.sql");
+		init("jdbc:mysql://" + Utils.MYSQL_URL + "/ims?serverTimezone=UTC", username, password,
+				"src/main/resources/sql-schema.sql");
 	}
 
 	public String readFile(String fileLocation) {
