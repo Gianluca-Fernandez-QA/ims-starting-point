@@ -92,7 +92,7 @@ public class ProductsDaoMysql implements Dao<Product> {
 		return null;
 	}
 
-	public Product read(Long id) {
+	public Product readProduct(Long id) {
 		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery("SELECT FROM products where id = " + id);) {
@@ -106,19 +106,19 @@ public class ProductsDaoMysql implements Dao<Product> {
 	}
 
 	/**
-	 * Updates a customer in the database
+	 * Updates a product in the database
 	 *
-	 * @param customer - takes in a customer object, the id field will be used to
-	 *                 update that customer in the database
+	 * @param product - takes in a product object, the id field will be used to
+	 *                 update that product in the database
 	 * @return
 	 */
 	@Override
-	public Customer update(Customer customer) {
+	public Product update(Product test) {
 		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);
 				Statement statement = connection.createStatement();) {
-			statement.executeUpdate("update products set Product_name ='" + customer.getFirstName() + "', surname ='"
-					+ customer.getSurname() + "' where id =" + customer.getId());
-			return readCustomer(customer.getId());
+			statement.executeUpdate("update products set Product_name ='" + test.getProduct_name() + "', Price ='"
+					+ test.getPrice() + "' where id =" + test.getProduct_id()());
+			return readProduct(test.getProduct_id());
 		} catch (Exception e) {
 			LOGGER.debug(e.getStackTrace());
 			LOGGER.error(e.getMessage());
@@ -135,16 +135,11 @@ public class ProductsDaoMysql implements Dao<Product> {
 	public void delete(long id) {
 		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);
 				Statement statement = connection.createStatement();) {
-			statement.executeUpdate("delete from customers where id = " + id);
+			statement.executeUpdate("delete from products where id = " + id);
 		} catch (Exception e) {
 			LOGGER.debug(e.getStackTrace());
 			LOGGER.error(e.getMessage());
 		}
 	}
 
-	@Override
-	public Product update(Product t) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
