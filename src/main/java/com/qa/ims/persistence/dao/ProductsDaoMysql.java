@@ -41,7 +41,7 @@ public class ProductsDaoMysql implements Dao<Product> {
 	}
 
 	/**
-	 * Reads all customers from the database
+	 * Reads all products from the database
 	 *
 	 * @return A list of customers
 	 */
@@ -76,9 +76,7 @@ public class ProductsDaoMysql implements Dao<Product> {
 	}
 
 	/**
-	 * Creates a customer in the database
-	 *
-	 * @param customer - takes in a customer object. id will be ignored
+	 * Creates a product in the database
 	 */
 	@Override
 	public Product create(Product test) {
@@ -97,9 +95,9 @@ public class ProductsDaoMysql implements Dao<Product> {
 	public Product read(Long id) {
 		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);
 				Statement statement = connection.createStatement();
-				ResultSet resultSet = statement.executeQuery("SELECT FROM customers where id = " + id);) {
+				ResultSet resultSet = statement.executeQuery("SELECT FROM products where id = " + id);) {
 			resultSet.next();
-			return customerFromResultSet(resultSet);
+			return productFromResultSet(resultSet);
 		} catch (Exception e) {
 			LOGGER.debug(e.getStackTrace());
 			LOGGER.error(e.getMessage());
@@ -118,7 +116,7 @@ public class ProductsDaoMysql implements Dao<Product> {
 	public Customer update(Customer customer) {
 		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);
 				Statement statement = connection.createStatement();) {
-			statement.executeUpdate("update customers set first_name ='" + customer.getFirstName() + "', surname ='"
+			statement.executeUpdate("update products set Product_name ='" + customer.getFirstName() + "', surname ='"
 					+ customer.getSurname() + "' where id =" + customer.getId());
 			return readCustomer(customer.getId());
 		} catch (Exception e) {
