@@ -64,7 +64,8 @@ public class ProductsDaoMysql implements Dao<Product> {
 	public Product readLatest() {
 		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);
 				Statement statement = connection.createStatement();
-				ResultSet resultSet = statement.executeQuery("SELECT * FROM products ORDER BY id DESC LIMIT 1");) {
+				ResultSet resultSet = statement
+						.executeQuery("SELECT * FROM products ORDER BY Product_id DESC LIMIT 1");) {
 			resultSet.next();
 			return productFromResultSet(resultSet);
 		} catch (Exception e) {
@@ -94,7 +95,7 @@ public class ProductsDaoMysql implements Dao<Product> {
 	public Product readProduct(Long id) {
 		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);
 				Statement statement = connection.createStatement();
-				ResultSet resultSet = statement.executeQuery("SELECT FROM products where id = " + id);) {
+				ResultSet resultSet = statement.executeQuery("SELECT FROM products where Product_id = " + id);) {
 			resultSet.next();
 			return productFromResultSet(resultSet);
 		} catch (Exception e) {
@@ -116,7 +117,7 @@ public class ProductsDaoMysql implements Dao<Product> {
 		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);
 				Statement statement = connection.createStatement();) {
 			statement.executeUpdate("update products set Product_name ='" + test.getProduct_name() + "', Price ='"
-					+ test.getPrice() + "' where id =" + test.getProduct_id());
+					+ test.getPrice() + "' where Product_id =" + test.getProduct_id());
 			return readProduct(test.getProduct_id());
 		} catch (Exception e) {
 			LOGGER.debug(e.getStackTrace());
@@ -134,7 +135,7 @@ public class ProductsDaoMysql implements Dao<Product> {
 	public void delete(long id) {
 		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);
 				Statement statement = connection.createStatement();) {
-			statement.executeUpdate("delete from products where id = " + id);
+			statement.executeUpdate("delete from products where Product_id = " + id);
 		} catch (Exception e) {
 			LOGGER.debug(e.getStackTrace());
 			LOGGER.error(e.getMessage());
