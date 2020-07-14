@@ -25,7 +25,7 @@ public class OrdersDaoMySql implements Dao<Product> {
 		this.password = password;
 	}
 
-	public static boolean test(int custId) {
+	public static boolean UserChecker(int custId) {
 
 		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);
 				Statement statement = connection.createStatement();
