@@ -8,10 +8,6 @@ import com.qa.ims.persistence.domain.Product;
 import com.qa.ims.services.CrudServices;
 import com.qa.ims.utils.Utils;
 
-/**
- * Takes in customer details for CRUD functionality
- *
- */
 public class ProductController implements CrudController<Product> {
 
 	public static final Logger LOGGER = Logger.getLogger(ProductController.class);

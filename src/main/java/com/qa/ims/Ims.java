@@ -17,6 +17,7 @@ import com.qa.ims.controller.ProductController;
 import com.qa.ims.persistence.dao.CustomerDaoMysql;
 import com.qa.ims.persistence.dao.ProductsDaoMysql;
 import com.qa.ims.persistence.domain.Domain;
+import com.qa.ims.persistence.domain.UserOrderInput;
 import com.qa.ims.services.CustomerServices;
 import com.qa.ims.services.ProductServices;
 import com.qa.ims.utils.Utils;
@@ -54,6 +55,7 @@ public class Ims {
 			doAction(test, action);
 			break;
 		case ORDER:
+			int Customer_id = UserOrderInput.input();
 			break;
 		case STOP:
 			break;

@@ -139,6 +139,8 @@ public class ProductsDaoMysql implements Dao<Product> {
 		} catch (Exception e) {
 			LOGGER.debug(e.getStackTrace());
 			LOGGER.error(e.getMessage());
+		} finally {
+			LOGGER.info("Product deleted");
 		}
 	}
 
