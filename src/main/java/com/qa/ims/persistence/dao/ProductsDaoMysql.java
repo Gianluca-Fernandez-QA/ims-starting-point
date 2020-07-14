@@ -95,7 +95,7 @@ public class ProductsDaoMysql implements Dao<Product> {
 	public Product readProduct(Long id) {
 		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);
 				Statement statement = connection.createStatement();
-				ResultSet resultSet = statement.executeQuery("SELECT FROM products where Product_id = " + id);) {
+				ResultSet resultSet = statement.executeQuery("SELECT * FROM products where Product_id = " + id);) {
 			resultSet.next();
 			return productFromResultSet(resultSet);
 		} catch (Exception e) {
