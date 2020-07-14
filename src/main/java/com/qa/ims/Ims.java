@@ -22,49 +22,34 @@ import com.qa.ims.services.ProductServices;
 import com.qa.ims.utils.Utils;
 
 public class Ims {
-
+	String username;
+	String password;
+	Action action;
+	Domain domain;
 	public static final Logger LOGGER = Logger.getLogger(Ims.class);
 
 	public void imsSystem() {
 		LOGGER.info("What is your username");
-		String username = Utils.getInput();
+		this.username = Utils.getInput();
 		LOGGER.info("What is your password");
-		String password = Utils.getInput();
+		this.password = Utils.getInput();
 
 		init(username, password);
-
-		LOGGER.info("Which entity would you like to use?");
-		Domain.printDomains();
-
-		Domain domain = Domain.getDomain();
-		LOGGER.info("What would you like to do with " + domain.name().toLowerCase() + ":");
-
-		Action.printActions();
-		Action action = Action.getAction();
-
-		switch (domain) {
-		case CUSTOMER:
-			CustomerController customerController = new CustomerController(
-					new CustomerServices(new CustomerDaoMysql(username, password)));
-			doAction(customerController, action);
-			break;
-		case ITEM:
-			ProductController test = new ProductController(
-					new ProductServices(new ProductsDaoMysql(username, password)));
-			doAction(test, action);
-			break;
-		case ORDER:
-
-			break;
-		case STOP:
-			break;
-		default:
-			break;
+		while (true) {
+			LOGGER.info("Which entity would you like to use?");
+			Domain.printDomains();
+			this.domain = Domain.getDomain();
+			Action.printActions();
+			this.action = Action.getAction();
+			domain(domain, username, password, action);
+			LOGGER.info("To continue inputting Data, Type CONTINUE");
+			if (!Utils.getInput().toUpperCase().equals("CONTINUE")) {
+				break;
+			}
 		}
-
 	}
 
-	public void doAction(CrudController<?> crudController, Action action) {
+	public void doAction(CrudController<?> crudController, Action sad) {
 		switch (action) {
 		case CREATE:
 			crudController.create();
@@ -79,6 +64,11 @@ public class Ims {
 			crudController.delete();
 			break;
 		case RETURN:
+			Domain.printDomains();
+			this.domain = Domain.getDomain();
+			Action.printActions();
+			this.action = Action.getAction();
+			domain(domain, username, password, action);
 			break;
 		default:
 			break;
@@ -137,11 +127,38 @@ public class Ims {
 				LOGGER.error(e.getMessage());
 				LOGGER.info("Enter Username: ");
 				username = Utils.getInput();
+				this.username = username;
 				LOGGER.info("Enter Password: ");
 				password = Utils.getInput();
+				this.password = password;
+
 				continue;
 			}
 		}
 	}
 
+	public void domain(Domain domain, String username, String password, Action action) {
+
+		LOGGER.info("What would you like to do with " + domain.name().toLowerCase() + ":");
+		switch (domain) {
+		case CUSTOMER:
+			CustomerController customerController = new CustomerController(
+					new CustomerServices(new CustomerDaoMysql(username, password)));
+			doAction(customerController, action);
+			break;
+		case ITEM:
+			ProductController test = new ProductController(
+					new ProductServices(new ProductsDaoMysql(username, password)));
+			doAction(test, action);
+			break;
+		case ORDER:
+
+			break;
+		case STOP:
+			break;
+		default:
+			break;
+		}
+
+	}
 }
