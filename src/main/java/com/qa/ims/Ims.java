@@ -42,14 +42,10 @@ public class Ims {
 			Action.printActions();
 			this.action = Action.getAction();
 			domain(domain, username, password, action);
-			LOGGER.info("To continue inputting Data, Type CONTINUE");
-			if (!Utils.getInput().toUpperCase().equals("CONTINUE")) {
-				break;
-			}
 		}
 	}
 
-	public void doAction(CrudController<?> crudController, Action sad) {
+	public void doAction(CrudController<?> crudController, Action action) {
 		switch (action) {
 		case CREATE:
 			crudController.create();
@@ -84,7 +80,7 @@ public class Ims {
 	 */
 	public void init(String username, String password) {
 
-		init("jdbc:mysql://" + Utils.MYSQL_URL + "/ims?serverTimezone=UTC", username, password,
+		init("jdbc:mysql://" + Utils.MYSQL_URL + "?serverTimezone=UTC", username, password,
 				"src/main/resources/sql-schema.sql");
 
 	}
@@ -153,8 +149,6 @@ public class Ims {
 			break;
 		case ORDER:
 
-			break;
-		case STOP:
 			break;
 		default:
 			break;

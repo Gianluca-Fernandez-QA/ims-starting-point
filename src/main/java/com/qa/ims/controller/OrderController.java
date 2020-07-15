@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.qa.ims.persistence.dao.OrdersDaoMySql;
 import com.qa.ims.persistence.domain.Order;
-import com.qa.ims.persistence.domain.UserOrderInput;
 import com.qa.ims.services.CrudServices;
 import com.qa.ims.utils.Utils;
 
@@ -32,10 +32,26 @@ public class OrderController implements CrudController<Order> {
 
 	@Override
 	public Order create() {
-		LOGGER.info("Enter Your Id");
-		int Customer_id = UserOrderInput.input();
+		LOGGER.info("Enter Your Customer Id");
+		long custId = Integer.parseInt(Utils.getInput());
+		while (true) {
+			if (OrdersDaoMySql.UserChecker(custId) == true) {
+				LOGGER.info("Enter Your Product Id");
+				long prodId = Integer.parseInt(Utils.getInput());
+				if (OrdersDaoMySql.prodChecker(prodId) == true) {
+					Long ordaw = OrdersDaoMySql.order(custId);
+					Order order = orderService.create(new Order(prodId, custId, ordaw));
+					return order;
+				} else {
+					LOGGER.error("Incorrect Customer Id");
+					LOGGER.info("Enter Your Customer Id");
+					custId = Integer.parseInt(Utils.getInput());
+					continue;
+				}
+			}
+		}
 		// TODO Auto-generated method stub
-		return null;
+
 	}
 
 	@Override
