@@ -35,8 +35,8 @@ public class Ims {
 		LOGGER.info("What is your username");
 		this.username = Utils.getInput();
 		LOGGER.info("What is your password");
-		// this.password = Utils.getInput();
-		this.password = "trs3yvvnbqhansje";
+		this.password = Utils.getInput();
+
 		init(username, password);
 		while (true) {
 
