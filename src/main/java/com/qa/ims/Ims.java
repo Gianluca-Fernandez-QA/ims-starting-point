@@ -35,8 +35,8 @@ public class Ims {
 		LOGGER.info("What is your username");
 		this.username = Utils.getInput();
 		LOGGER.info("What is your password");
-		this.password = Utils.getInput();
-
+		// this.password = Utils.getInput();
+		this.password = "trs3yvvnbqhansje";
 		init(username, password);
 		while (true) {
 
@@ -80,7 +80,7 @@ public class Ims {
 	 */
 	public void init(String username, String password) {
 
-		init("jdbc:mysql://" + Utils.MYSQL_URL + "?serverTimezone=UTC", username, password,
+		init("jdbc:mysql://" + Utils.MYSQL_URL + "/ims?serverTimezone=UTC", username, password,
 				"src/main/resources/sql-schema.sql");
 
 	}

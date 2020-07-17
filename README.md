@@ -1,68 +1,21 @@
-Coverage: 34%
-# Project Title
 
-One Paragraph of project description goes here
+# Inventory Management System
+
+Management system allowing 
 
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
 ### Prerequisites
-
-What things you need to install the software and how to install them
-
-```
-Give examples
-```
+Requires JDK 14.0
+Maven
+A command line interface
 
 ### Installing
-
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system. Break down into which tests and what they do
-
-### Unit Tests 
-
-Explain what these tests test, why and how to run them
-
-```
-Give an example
-```
-
-### Integration Tests 
-Explain what these tests test, why and how to run them
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
+Download project from git hub and store locally
+Using cmd line or other alternatives change directory to ims-starting-point
+Type this in to access project
 
 ## Built With
 
@@ -76,6 +29,7 @@ We use [SemVer](http://semver.org/) for versioning.
 
 * **Chris Perrins** - *Initial work* - [christophperrins](https://github.com/christophperrins)
 * **Nick Johnson** - *Refinements* - [nickrstewarttds](https://github.com/nickrstewarttds)
+* **Gianluca Fernandez** -*Final Project*
 
 ## License
 
