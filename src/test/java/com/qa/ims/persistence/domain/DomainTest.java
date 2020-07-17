@@ -35,13 +35,13 @@ public class DomainTest {
 		Domain.printDomains();
 	}
 
-	@Test
-	public void getDomainTest() {
-		Domain.getDomain();
-	}
-
-	@Test
-	public void getDomainTest1() {
-		Domain.getDomain();
-	}
+//	@Test
+//	public void getDomainTest() {
+//		Domain.getDomain();
+//	}
+//
+//	@Test
+//	public void getDomainTest1() {
+//		Domain.getDomain();
+//	}
 }

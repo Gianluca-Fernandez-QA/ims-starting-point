@@ -1,0 +1,15 @@
+Must -
+Have Risk assesment with over 5 risks
+Must change readme with instructions complining code
+Must use maven to create jar file 
+Merge Dev branch with Master branch and document
+
+Should - 
+test and get coverage up on Domain
+Should complete  OrderDaoMySql
+
+Could have- 
+Controller tests for every class.
+
+Won't have
+last tests.
