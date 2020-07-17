@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -20,7 +21,13 @@ public class OrdersDaoMySql implements Dao<Order> {
 	private static String password;
 
 	public OrdersDaoMySql(String username, String password) {
-		this.jdbcConnectionUrl = "jdbc:mysql://" + Utils.MYSQL_URL + "/ims?serverTimezone=UTC";
+		OrdersDaoMySql.jdbcConnectionUrl = "jdbc:mysql://" + Utils.MYSQL_URL + "/ims?serverTimezone=UTC";
+		OrdersDaoMySql.username = username;
+		OrdersDaoMySql.password = password;
+	}
+
+	public OrdersDaoMySql(String jdbcConnectionUrl, String username, String password) {
+		this.jdbcConnectionUrl = jdbcConnectionUrl;
 		this.username = username;
 		this.password = password;
 	}
@@ -29,9 +36,9 @@ public class OrdersDaoMySql implements Dao<Order> {
 
 		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);
 				Statement statement = connection.createStatement();
-				ResultSet resultSet = statement.executeQuery("select Customer_id from customer");) {
+				ResultSet resultSet = statement.executeQuery("select id from customers");) {
 			while (resultSet.next()) {
-				if (Id == resultSet.getInt("Customer_id")) {
+				if (Id == resultSet.getInt("id")) {
 					return true;
 				} else {
 					continue;
@@ -66,29 +73,29 @@ public class OrdersDaoMySql implements Dao<Order> {
 	public static Long order(long custId) {
 		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);
 				Statement statement = connection.createStatement();
-				ResultSet resultSet = statement.executeQuery("fk_customer_id, Order from order");) {
-			if (!(resultSet.getLong("Order") == 0)) {
-				resultSet.last();
-				if (resultSet.getLong("fk_customer_id") == custId) {
-					return resultSet.getLong("Order");
-				} else
-					return resultSet.getLong("Order") + 1;
-			}
+				ResultSet resultSet = statement.executeQuery("select fk_cust_id, orRef from Basket");) {
+			resultSet.last();
+
+			if (resultSet.getLong("fk_cust_id") == custId) {
+				return resultSet.getLong("orRef");
+			} else
+				return resultSet.getLong("orRef") + 1;
+
 		} catch (SQLException e) {
 			LOGGER.debug(e.getStackTrace());
 			LOGGER.error(e.getMessage());
 		}
 		return 0l;
-
 	}
 
 	public Order readLatest() {
 		while (true) {
 			try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);
 					Statement statement = connection.createStatement();
-					ResultSet resultSet = statement.executeQuery("SELECT * FROM Order ORDER BY id DESC LIMIT 1");) {
+					ResultSet resultSet = statement
+							.executeQuery("SELECT * FROM Basket ORDER BY Order_id DESC LIMIT 1");) {
 				resultSet.next();
-				return orderFromResultSet(resultSet);
+				return orderFromResultSet0(resultSet);
 
 			} catch (Exception e) {
 //           Disabling to make user interface cleaner
@@ -99,43 +106,84 @@ public class OrdersDaoMySql implements Dao<Order> {
 		}
 	}
 
-	static Order orderFromResultSet(ResultSet resultSet) throws SQLException {
-		Long Order_id = resultSet.getLong("Order_id");
-		Long Product_Id = resultSet.getLong("Product_id");
-		Long Customer_id = resultSet.getLong("Customer_id");
-		Long OrderRef = resultSet.getLong("Order");
-		return new Order(Product_Id, Customer_id, OrderRef);
+	static Order orderFromResultSet0(ResultSet resultSet) throws SQLException {
+		long Product_Id = resultSet.getInt("fk_product_id");
+		long Customer_id = resultSet.getInt("fk_cust_id");
+		long Order = resultSet.getInt("orRef");
+		return new Order(Product_Id, Customer_id, Order);
+	}
+
+	static Order orderFromResultSet1(ResultSet resultSet) throws SQLException {
+		String first_name = resultSet.getString("first_name");
+		String surname = resultSet.getString("surname");
+		Long OrderRef = resultSet.getLong("orRef");
+		String Product_name = resultSet.getString("Product_name");
+		float Price = resultSet.getFloat("Price");
+		return new Order(first_name, surname, OrderRef, Product_name, Price);
 	}
 
 	@Override
-	public void delete(long id) {
-		// TODO Auto-generated method stub
 
+	public void delete(long id) {
+		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);
+				Statement statement = connection.createStatement();) {
+			statement.executeUpdate("delete from Basket where orRef = " + id);
+		} catch (Exception e) {
+			LOGGER.debug(e.getStackTrace());
+			LOGGER.error(e.getMessage());
+		} finally {
+			LOGGER.info("Order deleted");
+		}
 	}
 
 	@Override
 	public List<Order> readAll() {
-		// TODO Auto-generated method stub
+		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);
+				Statement statement = connection.createStatement();
+				ResultSet resultSet = statement.executeQuery(
+						"select first_name, surname, orRef, Product_name, Price FROM Basket B INNER JOIN customers C ON C.id=B.fk_cust_id INNER JOIN products P ON B.fk_product_id=P.Product_id;");) {
+			ArrayList<Order> order = new ArrayList<>();
+//			resultSet.next();
+			while (resultSet.next()) {
+				order.add(orderFromResultSet1(resultSet));
+
+			}
+
+			return order;
+		} catch (SQLException e) {
+			LOGGER.debug(e.getStackTrace());
+			LOGGER.error(e.getMessage());
+		}
 		return null;
+
 	}
 
 	@Override
 	public Order create(Order order) {
 		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);
 				Statement statement = connection.createStatement();) {
-			statement.executeUpdate("insert into Order(fk_product_id, fk_customer_id, Order) values('"
+			statement.executeUpdate("insert into Basket(fk_product_id, fk_cust_id, orRef) values('"
 					+ order.getProduct_Id() + "','" + order.getCustomer_id() + "','" + order.getOrder() + "')");
+
+		} catch (Exception e) {
+			LOGGER.debug(e.getStackTrace());
+			LOGGER.error(e.getMessage());
+		}
+		LOGGER.info("Order Created");
+		return readLatest();
+	}
+
+	@Override
+	public Order update(Order order) {
+		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);
+				Statement statement = connection.createStatement();) {
+			statement.executeUpdate("update Basket set fk_product_id ='" + Order.getProduct_Id() + "' where Order_id ="
+					+ Order.getOrder_id());
 			return readLatest();
 		} catch (Exception e) {
 			LOGGER.debug(e.getStackTrace());
 			LOGGER.error(e.getMessage());
 		}
-		return null;
-	}
-
-	@Override
-	public Order update(Order t) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }

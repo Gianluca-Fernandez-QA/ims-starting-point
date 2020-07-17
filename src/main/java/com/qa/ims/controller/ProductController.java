@@ -22,6 +22,10 @@ public class ProductController implements CrudController<Product> {
 		return Utils.getInput();
 	}
 
+	Float getInputF() {
+		return Float.parseFloat(Utils.getInput());
+	}
+
 	/**
 	 * Reads all products to the logger
 	 */
@@ -29,7 +33,7 @@ public class ProductController implements CrudController<Product> {
 	public List<Product> readAll() {
 		List<Product> product = productService.readAll();
 		for (Product products : product) {
-			LOGGER.info(product.toString());
+			System.out.println(products.toString());
 		}
 		return product;
 	}
@@ -42,7 +46,8 @@ public class ProductController implements CrudController<Product> {
 		LOGGER.info("Enter a product name");
 		String Product_name = getInput();
 		LOGGER.info("Enter product's price");
-		float Price = Float.parseFloat(getInput());
+
+		Float Price = Float.parseFloat(getInput());
 		Product product = productService.create(new Product(Product_name, Price));
 		LOGGER.info("Product created");
 		return product;

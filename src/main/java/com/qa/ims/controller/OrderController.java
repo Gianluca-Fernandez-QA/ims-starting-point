@@ -25,7 +25,7 @@ public class OrderController implements CrudController<Order> {
 	public List<Order> readAll() {
 		List<Order> order = orderService.readAll();
 		for (Order orders : order) {
-			LOGGER.info(order.toString());
+			System.out.println(orders.toString());
 		}
 		return order;
 	}
@@ -56,13 +56,20 @@ public class OrderController implements CrudController<Order> {
 
 	@Override
 	public Order update() {
-		// TODO Auto-generated method stub
-		return null;
+		LOGGER.info("Please enter the id of the Order you would like to update");
+		Long id = Long.valueOf(getInput());
+		LOGGER.info("Please enter the id of the Product you would like to update");
+		Long prodid = Long.valueOf(getInput());
+		Order order = orderService.update(new Order(id, prodid));
+		LOGGER.info("Order Updated");
+		return order;
 	}
 
 	@Override
 	public void delete() {
-		// TODO Auto-generated method stub
+		LOGGER.info("Enter Order Reference Of Order to delete");
+		Long id = Long.valueOf(getInput());
+		orderService.delete(id);
 
 	}
 }

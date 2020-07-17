@@ -32,11 +32,10 @@ public class ProductsDaoMysql implements Dao<Product> {
 		this.password = password;
 	}
 
-	Product productFromResultSet(ResultSet resultSet) throws SQLException {
-		Long Product_id = resultSet.getLong("Product_id");
-		String Product_name = resultSet.getString("Product_id");
-		float Price = resultSet.getFloat("Product_id");
-		return new Product(Product_id, Product_name, Price);
+	Product productFromResultSet1(ResultSet resultSet) throws SQLException {
+		String Product_name = resultSet.getString("Product_name");
+		float Price = resultSet.getFloat("Price");
+		return new Product(Product_name, Price);
 	}
 
 	/**
@@ -50,8 +49,9 @@ public class ProductsDaoMysql implements Dao<Product> {
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery("select * from products");) {
 			ArrayList<Product> product = new ArrayList<>();
+
 			while (resultSet.next()) {
-				product.add(productFromResultSet(resultSet));
+				product.add(productFromResultSet1(resultSet));
 			}
 			return product;
 		} catch (SQLException e) {
@@ -67,7 +67,7 @@ public class ProductsDaoMysql implements Dao<Product> {
 				ResultSet resultSet = statement
 						.executeQuery("SELECT * FROM products ORDER BY Product_id DESC LIMIT 1");) {
 			resultSet.next();
-			return productFromResultSet(resultSet);
+			return productFromResultSet1(resultSet);
 		} catch (Exception e) {
 			LOGGER.debug(e.getStackTrace());
 			LOGGER.error(e.getMessage());
@@ -79,11 +79,11 @@ public class ProductsDaoMysql implements Dao<Product> {
 	 * Creates a product in the database
 	 */
 	@Override
-	public Product create(Product test) {
+	public Product create(Product product) {
 		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);
 				Statement statement = connection.createStatement();) {
-			statement.executeUpdate("insert into products(Product_name, Price) values('" + test.getProduct_name()
-					+ "','" + test.getPrice() + "')");
+			statement.executeUpdate("insert into products(Product_name, Price) values('" + product.getProduct_name()
+					+ "','" + product.getPrice() + "')");
 			return readLatest();
 		} catch (Exception e) {
 			LOGGER.debug(e.getStackTrace());
@@ -97,7 +97,7 @@ public class ProductsDaoMysql implements Dao<Product> {
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery("SELECT * FROM products where Product_id = " + id);) {
 			resultSet.next();
-			return productFromResultSet(resultSet);
+			return productFromResultSet1(resultSet);
 		} catch (Exception e) {
 			LOGGER.debug(e.getStackTrace());
 			LOGGER.error(e.getMessage());

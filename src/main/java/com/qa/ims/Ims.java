@@ -13,11 +13,14 @@ import org.apache.log4j.Logger;
 import com.qa.ims.controller.Action;
 import com.qa.ims.controller.CrudController;
 import com.qa.ims.controller.CustomerController;
+import com.qa.ims.controller.OrderController;
 import com.qa.ims.controller.ProductController;
 import com.qa.ims.persistence.dao.CustomerDaoMysql;
+import com.qa.ims.persistence.dao.OrdersDaoMySql;
 import com.qa.ims.persistence.dao.ProductsDaoMysql;
 import com.qa.ims.persistence.domain.Domain;
 import com.qa.ims.services.CustomerServices;
+import com.qa.ims.services.OrderServices;
 import com.qa.ims.services.ProductServices;
 import com.qa.ims.utils.Utils;
 
@@ -36,9 +39,11 @@ public class Ims {
 
 		init(username, password);
 		while (true) {
+
 			LOGGER.info("Which entity would you like to use?");
 			Domain.printDomains();
 			this.domain = Domain.getDomain();
+			LOGGER.info("What would you like to do with " + domain.name().toLowerCase() + ":");
 			Action.printActions();
 			this.action = Action.getAction();
 			domain(domain, username, password, action);
@@ -60,11 +65,6 @@ public class Ims {
 			crudController.delete();
 			break;
 		case RETURN:
-			Domain.printDomains();
-			this.domain = Domain.getDomain();
-			Action.printActions();
-			this.action = Action.getAction();
-			domain(domain, username, password, action);
 			break;
 		default:
 			break;
@@ -135,7 +135,6 @@ public class Ims {
 
 	public void domain(Domain domain, String username, String password, Action action) {
 
-		LOGGER.info("What would you like to do with " + domain.name().toLowerCase() + ":");
 		switch (domain) {
 		case CUSTOMER:
 			CustomerController customerController = new CustomerController(
@@ -148,7 +147,9 @@ public class Ims {
 			doAction(test, action);
 			break;
 		case ORDER:
-
+			OrderController orderController = new OrderController(
+					new OrderServices(new OrdersDaoMySql(username, password)));
+			doAction(orderController, action);
 			break;
 		default:
 			break;
