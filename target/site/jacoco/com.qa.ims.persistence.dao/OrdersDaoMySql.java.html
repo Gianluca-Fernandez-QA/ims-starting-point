@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OrdersDaoMySql.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ForenameSurname-SoftwareMarch16</a> &gt; <a href="index.source.html" class="el_package">com.qa.ims.persistence.dao</a> &gt; <span class="el_source">OrdersDaoMySql.java</span></div><h1>OrdersDaoMySql.java</h1><pre class="source lang-java linenums">package com.qa.ims.persistence.dao;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+
+import com.qa.ims.persistence.domain.Order;
+import com.qa.ims.utils.Utils;
+
+public class OrdersDaoMySql implements Dao&lt;Order&gt; {
+<span class="fc" id="L17">	public static final Logger LOGGER = Logger.getLogger(CustomerDaoMysql.class);</span>
+
+	private static String jdbcConnectionUrl;
+	private static String username;
+<span class="fc" id="L21">	private static String password;</span>
+
+<span class="nc" id="L23">	public OrdersDaoMySql(String username, String password) {</span>
+<span class="nc" id="L24">		OrdersDaoMySql.jdbcConnectionUrl = &quot;jdbc:mysql://&quot; + Utils.MYSQL_URL + &quot;/ims?serverTimezone=UTC&quot;;</span>
+<span class="nc" id="L25">		OrdersDaoMySql.username = username;</span>
+<span class="nc" id="L26">		OrdersDaoMySql.password = password;</span>
+<span class="nc" id="L27">	}</span>
+
+<span class="fc" id="L29">	public OrdersDaoMySql(String jdbcConnectionUrl, String username, String password) {</span>
+<span class="fc" id="L30">		this.jdbcConnectionUrl = jdbcConnectionUrl;</span>
+<span class="fc" id="L31">		this.username = username;</span>
+<span class="fc" id="L32">		this.password = password;</span>
+<span class="fc" id="L33">	}</span>
+
+	public static boolean UserChecker(long Id) {
+
+<span class="nc" id="L37">		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);</span>
+<span class="nc" id="L38">				Statement statement = connection.createStatement();</span>
+<span class="nc" id="L39">				ResultSet resultSet = statement.executeQuery(&quot;select id from customers&quot;);) {</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">			while (resultSet.next()) {</span>
+<span class="nc bnc" id="L41" title="All 2 branches missed.">				if (Id == resultSet.getInt(&quot;id&quot;)) {</span>
+<span class="nc" id="L42">					return true;</span>
+				} else {
+					continue;
+				}
+			}
+<span class="nc bnc" id="L47" title="All 4 branches missed.">		} catch (SQLException e) {</span>
+<span class="nc" id="L48">			LOGGER.debug(e.getStackTrace());</span>
+<span class="nc" id="L49">			LOGGER.error(e.getMessage());</span>
+		}
+<span class="nc" id="L51">		return false;</span>
+	}
+
+	public static boolean prodChecker(long Id) {
+
+<span class="nc" id="L56">		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);</span>
+<span class="nc" id="L57">				Statement statement = connection.createStatement();</span>
+<span class="nc" id="L58">				ResultSet resultSet = statement.executeQuery(&quot;select Product_id from products&quot;);) {</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">			while (resultSet.next()) {</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">				if (Id == resultSet.getInt(&quot;Product_id&quot;)) {</span>
+<span class="nc" id="L61">					return true;</span>
+				} else {
+					continue;
+				}
+			}
+<span class="nc bnc" id="L66" title="All 4 branches missed.">		} catch (SQLException e) {</span>
+<span class="nc" id="L67">			LOGGER.debug(e.getStackTrace());</span>
+<span class="nc" id="L68">			LOGGER.error(e.getMessage());</span>
+		}
+<span class="nc" id="L70">		return false;</span>
+	}
+
+	public static Long order(long custId) {
+<span class="nc" id="L74">		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);</span>
+<span class="nc" id="L75">				Statement statement = connection.createStatement();</span>
+<span class="nc" id="L76">				ResultSet resultSet = statement.executeQuery(&quot;select fk_cust_id, orRef from Basket&quot;);) {</span>
+<span class="nc" id="L77">			resultSet.last();</span>
+
+<span class="nc bnc" id="L79" title="All 2 branches missed.">			if (resultSet.getLong(&quot;fk_cust_id&quot;) == custId) {</span>
+<span class="nc" id="L80">				return resultSet.getLong(&quot;orRef&quot;);</span>
+			} else
+<span class="nc" id="L82">				return resultSet.getLong(&quot;orRef&quot;) + 1;</span>
+
+<span class="nc bnc" id="L84" title="All 4 branches missed.">		} catch (SQLException e) {</span>
+<span class="nc" id="L85">			LOGGER.debug(e.getStackTrace());</span>
+<span class="nc" id="L86">			LOGGER.error(e.getMessage());</span>
+		}
+<span class="nc" id="L88">		return 0l;</span>
+	}
+
+	public Order readLatest() {
+<span class="nc" id="L92">		while (true) {</span>
+<span class="nc" id="L93">			try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);</span>
+<span class="nc" id="L94">					Statement statement = connection.createStatement();</span>
+<span class="nc" id="L95">					ResultSet resultSet = statement</span>
+<span class="nc" id="L96">							.executeQuery(&quot;SELECT * FROM Basket ORDER BY Order_id DESC LIMIT 1&quot;);) {</span>
+<span class="nc" id="L97">				resultSet.next();</span>
+<span class="nc" id="L98">				return orderFromResultSet0(resultSet);</span>
+
+<span class="nc" id="L100">			} catch (Exception e) {</span>
+//           Disabling to make user interface cleaner
+<span class="nc" id="L102">				LOGGER.debug(e.getStackTrace());</span>
+<span class="nc" id="L103">				LOGGER.error(e.getMessage());</span>
+
+			}
+		}
+	}
+
+	static Order orderFromResultSet0(ResultSet resultSet) throws SQLException {
+<span class="nc" id="L110">		long Product_Id = resultSet.getInt(&quot;fk_product_id&quot;);</span>
+<span class="nc" id="L111">		long Customer_id = resultSet.getInt(&quot;fk_cust_id&quot;);</span>
+<span class="nc" id="L112">		long Order = resultSet.getInt(&quot;orRef&quot;);</span>
+<span class="nc" id="L113">		return new Order(Product_Id, Customer_id, Order);</span>
+	}
+
+	static Order orderFromResultSet1(ResultSet resultSet) throws SQLException {
+<span class="nc" id="L117">		String first_name = resultSet.getString(&quot;first_name&quot;);</span>
+<span class="nc" id="L118">		String surname = resultSet.getString(&quot;surname&quot;);</span>
+<span class="nc" id="L119">		Long OrderRef = resultSet.getLong(&quot;orRef&quot;);</span>
+<span class="nc" id="L120">		String Product_name = resultSet.getString(&quot;Product_name&quot;);</span>
+<span class="nc" id="L121">		float Price = resultSet.getFloat(&quot;Price&quot;);</span>
+<span class="nc" id="L122">		return new Order(first_name, surname, OrderRef, Product_name, Price);</span>
+	}
+
+	@Override
+
+	public void delete(long id) {
+<span class="nc" id="L128">		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);</span>
+<span class="nc" id="L129">				Statement statement = connection.createStatement();) {</span>
+<span class="nc" id="L130">			statement.executeUpdate(&quot;delete from Basket where orRef = &quot; + id);</span>
+<span class="nc" id="L131">		} catch (Exception e) {</span>
+<span class="nc" id="L132">			LOGGER.debug(e.getStackTrace());</span>
+<span class="nc" id="L133">			LOGGER.error(e.getMessage());</span>
+		} finally {
+<span class="nc" id="L135">			LOGGER.info(&quot;Order deleted&quot;);</span>
+		}
+<span class="nc" id="L137">	}</span>
+
+	@Override
+	public List&lt;Order&gt; readAll() {
+<span class="nc" id="L141">		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);</span>
+<span class="nc" id="L142">				Statement statement = connection.createStatement();</span>
+<span class="nc" id="L143">				ResultSet resultSet = statement.executeQuery(</span>
+<span class="nc" id="L144">						&quot;select first_name, surname, orRef, Product_name, Price FROM Basket B INNER JOIN customers C ON C.id=B.fk_cust_id INNER JOIN products P ON B.fk_product_id=P.Product_id;&quot;);) {</span>
+<span class="nc" id="L145">			ArrayList&lt;Order&gt; order = new ArrayList&lt;&gt;();</span>
+//			resultSet.next();
+<span class="nc bnc" id="L147" title="All 2 branches missed.">			while (resultSet.next()) {</span>
+<span class="nc" id="L148">				order.add(orderFromResultSet1(resultSet));</span>
+
+			}
+
+<span class="nc" id="L152">			return order;</span>
+<span class="nc" id="L153">		} catch (SQLException e) {</span>
+<span class="nc" id="L154">			LOGGER.debug(e.getStackTrace());</span>
+<span class="nc" id="L155">			LOGGER.error(e.getMessage());</span>
+		}
+<span class="nc" id="L157">		return null;</span>
+
+	}
+
+	@Override
+	public Order create(Order order) {
+<span class="nc" id="L163">		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);</span>
+<span class="nc" id="L164">				Statement statement = connection.createStatement();) {</span>
+<span class="nc" id="L165">			statement.executeUpdate(&quot;insert into Basket(fk_product_id, fk_cust_id, orRef) values('&quot;</span>
+<span class="nc" id="L166">					+ order.getProduct_Id() + &quot;','&quot; + order.getCustomer_id() + &quot;','&quot; + order.getOrder() + &quot;')&quot;);</span>
+
+<span class="nc" id="L168">		} catch (Exception e) {</span>
+<span class="nc" id="L169">			LOGGER.debug(e.getStackTrace());</span>
+<span class="nc" id="L170">			LOGGER.error(e.getMessage());</span>
+		}
+<span class="nc" id="L172">		LOGGER.info(&quot;Order Created&quot;);</span>
+<span class="nc" id="L173">		return readLatest();</span>
+	}
+
+	@Override
+	public Order update(Order order) {
+<span class="nc" id="L178">		try (Connection connection = DriverManager.getConnection(jdbcConnectionUrl, username, password);</span>
+<span class="nc" id="L179">				Statement statement = connection.createStatement();) {</span>
+<span class="nc" id="L180">			statement.executeUpdate(&quot;update Basket set fk_product_id ='&quot; + Order.getProduct_Id() + &quot;' where Order_id =&quot;</span>
+<span class="nc" id="L181">					+ Order.getOrder_id());</span>
+<span class="nc" id="L182">			return readLatest();</span>
+<span class="nc" id="L183">		} catch (Exception e) {</span>
+<span class="nc" id="L184">			LOGGER.debug(e.getStackTrace());</span>
+<span class="nc" id="L185">			LOGGER.error(e.getMessage());</span>
+		}
+<span class="nc" id="L187">		return null;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

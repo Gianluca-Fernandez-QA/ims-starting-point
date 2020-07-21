@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Order.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ForenameSurname-SoftwareMarch16</a> &gt; <a href="index.source.html" class="el_package">com.qa.ims.persistence.domain</a> &gt; <span class="el_source">Order.java</span></div><h1>Order.java</h1><pre class="source lang-java linenums">package com.qa.ims.persistence.domain;
+
+public class Order {
+
+	private static Long Order_id;
+	private static Long Product_Id;
+	private Long Customer_id;
+	private Long Order;
+	private String first_name;
+	private String surname;
+	private Long orderRef;
+	private String product_name;
+	private float price;
+
+<span class="nc" id="L15">	public Order(Long order_id, Long product_Id, Long customer_id, Long order) {</span>
+
+<span class="nc" id="L17">		this.Order_id = order_id;</span>
+<span class="nc" id="L18">		this.Product_Id = product_Id;</span>
+<span class="nc" id="L19">		this.Customer_id = customer_id;</span>
+<span class="nc" id="L20">		this.Order = order;</span>
+
+<span class="nc" id="L22">	}</span>
+
+<span class="fc" id="L24">	public Order(Long product_Id, Long customer_id, Long order) {</span>
+<span class="fc" id="L25">		this.Product_Id = product_Id;</span>
+<span class="fc" id="L26">		this.Customer_id = customer_id;</span>
+<span class="fc" id="L27">		this.Order = order;</span>
+
+<span class="fc" id="L29">	}</span>
+
+<span class="nc" id="L31">	public Order(Long order_id, Long product_Id) {</span>
+<span class="nc" id="L32">		Order_id = order_id;</span>
+<span class="nc" id="L33">		Product_Id = product_Id;</span>
+<span class="nc" id="L34">	}</span>
+
+<span class="nc" id="L36">	public Order(String first_name, String surname, Long orderRef, String product_name, float price) {</span>
+<span class="nc" id="L37">		this.first_name = first_name;</span>
+<span class="nc" id="L38">		this.surname = surname;</span>
+<span class="nc" id="L39">		this.orderRef = orderRef;</span>
+<span class="nc" id="L40">		this.product_name = product_name;</span>
+<span class="nc" id="L41">		this.price = price;</span>
+<span class="nc" id="L42">	}</span>
+
+	@Override
+	public String toString() {
+<span class="fc" id="L46">		return &quot;First Name &quot; + first_name + &quot; Surname: &quot; + surname + &quot; Order# &quot; + orderRef + &quot; Product Name: &quot;</span>
+<span class="fc" id="L47">				+ product_name + &quot; Price &quot; + price;</span>
+	}
+
+	public static Long getOrder_id() {
+<span class="nc" id="L51">		return Order_id;</span>
+	}
+
+	public void setOrder_id(Long order_id) {
+<span class="nc" id="L55">		Order_id = order_id;</span>
+<span class="nc" id="L56">	}</span>
+
+	public static Long getProduct_Id() {
+<span class="nc" id="L59">		return Product_Id;</span>
+	}
+
+	public void setProduct_Id(Long product_Id) {
+<span class="nc" id="L63">		Product_Id = product_Id;</span>
+<span class="nc" id="L64">	}</span>
+
+	public Long getCustomer_id() {
+<span class="nc" id="L67">		return Customer_id;</span>
+	}
+
+	public void setCustomer_id(Long customer_id) {
+<span class="nc" id="L71">		Customer_id = customer_id;</span>
+<span class="nc" id="L72">	}</span>
+
+	public Long getOrder() {
+<span class="nc" id="L75">		return Order;</span>
+	}
+
+	public void setOrder(Long order) {
+<span class="nc" id="L79">		Order = order;</span>
+<span class="nc" id="L80">	}</span>
+
+	public String getFirst_name() {
+<span class="nc" id="L83">		return first_name;</span>
+	}
+
+	public void setFirst_name(String first_name) {
+<span class="nc" id="L87">		this.first_name = first_name;</span>
+<span class="nc" id="L88">	}</span>
+
+	public String getSurname() {
+<span class="nc" id="L91">		return surname;</span>
+	}
+
+	public void setSurname(String surname) {
+<span class="nc" id="L95">		this.surname = surname;</span>
+<span class="nc" id="L96">	}</span>
+
+	public Long getOrderRef() {
+<span class="nc" id="L99">		return orderRef;</span>
+	}
+
+	public void setOrderRef(Long orderRef) {
+<span class="nc" id="L103">		this.orderRef = orderRef;</span>
+<span class="nc" id="L104">	}</span>
+
+	public String getProduct_name() {
+<span class="nc" id="L107">		return product_name;</span>
+	}
+
+	public void setProduct_name(String product_name) {
+<span class="nc" id="L111">		this.product_name = product_name;</span>
+<span class="nc" id="L112">	}</span>
+
+	public float getPrice() {
+<span class="nc" id="L115">		return price;</span>
+	}
+
+	public void setPrice(float price) {
+<span class="nc" id="L119">		this.price = price;</span>
+<span class="nc" id="L120">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
